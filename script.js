@@ -1,54 +1,41 @@
-// ----------  fee helpers ----------
-function spaLegal(price){
-  /* crude tier: 0–500k = 1%, next 500k = 0.8%, >1M =0.5%  */
-  let fee=0;
-  const tiers=[[500000,0.01],[500000,0.008],[Infinity,0.005]];
-  let remaining=price;
-  for(const [cap,rate] of tiers){
-    const slice=Math.min(remaining,cap);
-    fee+=slice*rate;
-    remaining-=slice;
-    if(!remaining) break;
-  }
-  return fee;
+function fmt(num) {
+  return 'RM ' + num.toLocaleString('en-MY', { minimumFractionDigits: 2 });
 }
-function loanLegal(loan){ return loan*0.012; }          // ~1.2 %
-function motDuty(price,waived){ return waived?0:price*0.01; } // 1 % if not 1st Home
 
-// ----------  main calc ----------
-document.getElementById("btnCalc").addEventListener("click",()=>{
-  const price=+document.getElementById("price").value;
-  const rate=+document.getElementById("rate").value/100/12; // monthly rate
-  const years=+document.getElementById("years").value;
-  const firstHome=document.getElementById("firstHome").checked;
-  const includeLegal=document.getElementById("fullLoan").checked;
+function calcROI() {
+  const price = parseFloat(document.getElementById('price').value) || 0;
+  const rent = parseFloat(document.getElementById('rent').value) || 0;
+  const exp = parseFloat(document.getElementById('expenses').value) || 0;
+  const cash = parseFloat(document.getElementById('cash').value);
+  const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
+  const years = parseInt(document.getElementById('years').value);
+  const months = years * 12;
 
-  if(!price||!rate||!years){alert("Please fill all values");return;}
+  const warn = document.getElementById('warnMsg');
+  const res = document.getElementById('result');
 
-  // preliminary legal fees (based on house price for SPA & MOT, later on loan for loanLegal)
-  const spa=spaLegal(price);
-  const mot=motDuty(price,firstHome);
-  let provisionalLoan=price;
-  if(includeLegal) provisionalLoan+=spa+mot; // add upfront fees into loan
+  if (!cash || cash <= 0) {
+    warn.style.display = 'block';
+    res.style.display = 'none';
+    return;
+  } else {
+    warn.style.display = 'none';
+  }
 
-  const loanLegalFee=loanLegal(provisionalLoan);
-  if(includeLegal) provisionalLoan+=loanLegalFee; // full‑loan means add this too
+  const annualRent = rent * 12;
+  const annualExp = exp * 12;
+  const netIncome = annualRent - annualExp;
+  const roiPct = (netIncome / cash) * 100;
 
-  // final monthly repayment
-  const n=years*12;
-  const monthly = (provisionalLoan*rate)/(1-Math.pow(1+rate,-n));
+  // Loan repayment
+  const loanAmount = price * 0.9;
+  const monthlyLoan = loanAmount * rate * Math.pow(1 + rate, months) / (Math.pow(1 + rate, months) - 1);
 
-  // total cash needed if NOT full‑loan
-  const totalCash = includeLegal ? 0 : (spa+mot+loanLegalFee);
+  document.getElementById('annualRent').textContent = fmt(annualRent);
+  document.getElementById('annualExp').textContent = fmt(annualExp);
+  document.getElementById('netIncome').textContent = fmt(netIncome);
+  document.getElementById('roi').textContent = roiPct.toFixed(2) + '%';
+  document.getElementById('monthlyLoan').textContent = fmt(monthlyLoan);
 
-  // ----------  output ----------
-  const fmt=v=>`RM ${v.toLocaleString('en-MY',{minimumFractionDigits:2})}`;
-  document.getElementById("loanAmt").textContent     = fmt(provisionalLoan);
-  document.getElementById("monthly").textContent     = fmt(monthly);
-  document.getElementById("spaFee").textContent      = fmt(spa);
-  document.getElementById("motFee").textContent      = fmt(mot);
-  document.getElementById("loanFee").textContent     = fmt(loanLegalFee);
-  document.getElementById("totalCash").textContent   = includeLegal ? "– Full Loan –" : fmt(totalCash);
-
-  document.getElementById("result").hidden=false;
-});
+  res.style.display = 'block';
+}
