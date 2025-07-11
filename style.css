@@ -1,21 +1,65 @@
-/* Simple, clean & mobile‑first */
-*{box-sizing:border-box;font-family:system-ui,Segoe UI,Arial;}
-body{margin:0;display:flex;justify-content:center;align-items:flex-start;
-     background:#f8fafc;padding:2rem;}
-.card{background:#fff;padding:1.5rem;border-radius:12px;
-      max-width:400px;width:100%;box-shadow:0 6px 16px rgba(0,0,0,.08);}
-h1{margin-top:0;font-size:1.5rem;text-align:center}
-label{display:block;margin:0.75rem 0;font-size:0.95rem}
-input[type=number]{width:100%;padding:0.55rem;border:1px solid #ccc;
-                   border-radius:8px;font-size:1rem}
-.chk{display:flex;align-items:center;font-size:0.9rem}
-.chk input{margin-right:0.5rem}
-button{display:block;width:100%;padding:0.7rem 0;border:none;background:#2563eb;
-       color:#fff;font-size:1rem;border-radius:8px;margin-top:1rem;cursor:pointer}
-button:hover{background:#1e4fd6}
-section{margin-top:1.5rem}
-table{width:100%;border-collapse:collapse;font-size:0.95rem}
-th,td{padding:0.4rem 0}
-th{text-align:left}
-.total th,.total td{font-weight:600;border-top:2px solid #ddd}
-@media(min-width:600px){body{align-items:center}}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+.card {
+  background: white;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+label {
+  font-weight: 500;
+  display: block;
+  margin-top: 1rem;
+}
+input {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: #0ea5e9;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}
+button:hover {
+  background: #0284c7;
+}
+.result {
+  margin-top: 2rem;
+  background: #e0f7ec;
+  padding: 1rem;
+  border-radius: 8px;
+}
+.result p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #065f46;
+}
+.warning {
+  color: red;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  text-align: center;
+}
