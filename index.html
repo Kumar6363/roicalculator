@@ -3,48 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EzySales Agent Tools</title>
+  <title>Property ROI Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: #f3f4f6;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
-      background: #f4f6f8;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 2rem;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
     }
     h1 {
-      color: #333;
-    }
-    .tools {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      width: 100%;
-      max-width: 400px;
-    }
-    .tools a {
-      background: white;
-      padding: 15px 20px;
       text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      color: #1a73e8;
-      transition: all 0.2s ease;
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
     }
-    .tools a:hover {
-      background: #e6f0ff;
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .result {
+      margin-top: 1.5rem;
+      background: #f0fdf4;
+      padding: 1rem;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .result p {
+      margin: 0.4rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #16a34a;
     }
   </style>
 </head>
 <body>
-  <h1>EzySales Agent Tools</h1>
-  <div class="tools">
-    <a href="https://ezyndicalculation.netlify.app/" target="_blank">💰 NDI Calculator</a>
-    <a href="https://ezydsrcalculation.netlify.app/" target="_blank">📊 DSR Calculator</a>
-    <a href="https://ezyhomeloancalculator.netlify.app/" target="_blank">🏡 Home Loan Calculator</a>
+  <div class="card">
+    <h1>Property ROI Calculator</h1>
+
+    <label>Property Price (RM)</label>
+    <input type="number" id="price" placeholder="e.g. 300000" />
+
+    <label>Monthly Rent (RM)</label>
+    <input type="number" id="rent" placeholder="e.g. 1500" />
+
+    <label>Monthly Expenses (RM)</label>
+    <input type="number" id="expenses" placeholder="e.g. 300" />
+
+    <label>Total Cash Invested (RM)</label>
+    <input type="number" id="cash" placeholder="e.g. 60000" />
+
+    <button onclick="calcROI()">Calculate ROI</button>
+
+    <div class="result" id="result" style="display:none;">
+      <p>Annual Rental Income: <span id="annualRent"></span></p>
+      <p>Annual Expenses: <span id="annualExp"></span></p>
+      <p>Net Annual Income: <span id="netIncome"></span></p>
+      <p>ROI: <span id="roi"></span></p>
+    </div>
   </div>
+
+  <script>
+    function fmt(num) {
+      return 'RM ' + num.toLocaleString('en-MY', { minimumFractionDigits: 2 });
+    }
+
+    function calcROI() {
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const rent = parseFloat(document.getElementById('rent').value) || 0;
+      const exp = parseFloat(document.getElementById('expenses').value) || 0;
+      const cash = parseFloat(document.getElementById('cash').value) || 0;
+
+      if (!price || !rent || !cash) return;
+
+      const annualRent = rent * 12;
+      const annualExp = exp * 12;
+      const netIncome = annualRent - annualExp;
+      const roiPct = (netIncome / cash) * 100;
+
+      document.getElementById('annualRent').textContent = fmt(annualRent);
+      document.getElementById('annualExp').textContent = fmt(annualExp);
+      document.getElementById('netIncome').textContent = fmt(netIncome);
+      document.getElementById('roi').textContent = roiPct.toFixed(2) + '%';
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
