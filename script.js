@@ -24,13 +24,18 @@ function calcROI() {
 
   const annualRent = rent * 12;
   const annualExp = exp * 12;
-  const netIncome = annualRent - annualExp;
-  const roiPct = (netIncome / cash) * 100;
 
-  // Loan repayment
+  // Calculate loan repayment
   const loanAmount = price * 0.9;
   const monthlyLoan = loanAmount * rate * Math.pow(1 + rate, months) / (Math.pow(1 + rate, months) - 1);
+  const annualLoan = monthlyLoan * 12;
 
+  // Net annual income INCLUDING loan repayments
+  const netIncome = annualRent - annualExp - annualLoan;
+
+  const roiPct = (netIncome / cash) * 100;
+
+  // Display
   document.getElementById('annualRent').textContent = fmt(annualRent);
   document.getElementById('annualExp').textContent = fmt(annualExp);
   document.getElementById('netIncome').textContent = fmt(netIncome);
