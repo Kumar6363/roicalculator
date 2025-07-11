@@ -68,6 +68,12 @@
       font-weight: 600;
       color: #16a34a;
     }
+    .warning {
+      color: red;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -75,7 +81,7 @@
     <h1>Property ROI Calculator</h1>
 
     <label>Property Price (RM)</label>
-    <input type="number" id="price" placeholder="e.g. 300000" />
+    <input type="number" id="price" placeholder="e.g. 350000" />
 
     <label>Monthly Rent (RM)</label>
     <input type="number" id="rent" placeholder="e.g. 1500" />
@@ -85,6 +91,8 @@
 
     <label>Total Cash Invested (RM)</label>
     <input type="number" id="cash" placeholder="e.g. 60000" />
+
+    <div class="warning" id="warnMsg" style="display:none;">❗ Please enter a valid Cash Invested amount above RM 0</div>
 
     <button onclick="calcROI()">Calculate ROI</button>
 
@@ -105,9 +113,18 @@
       const price = parseFloat(document.getElementById('price').value) || 0;
       const rent = parseFloat(document.getElementById('rent').value) || 0;
       const exp = parseFloat(document.getElementById('expenses').value) || 0;
-      const cash = parseFloat(document.getElementById('cash').value) || 0;
+      const cash = parseFloat(document.getElementById('cash').value);
 
-      if (!price || !rent || !cash) return;
+      const warn = document.getElementById('warnMsg');
+      const res = document.getElementById('result');
+
+      if (!cash || cash <= 0) {
+        warn.style.display = 'block';
+        res.style.display = 'none';
+        return;
+      } else {
+        warn.style.display = 'none';
+      }
 
       const annualRent = rent * 12;
       const annualExp = exp * 12;
@@ -118,7 +135,7 @@
       document.getElementById('annualExp').textContent = fmt(annualExp);
       document.getElementById('netIncome').textContent = fmt(netIncome);
       document.getElementById('roi').textContent = roiPct.toFixed(2) + '%';
-      document.getElementById('result').style.display = 'block';
+      res.style.display = 'block';
     }
   </script>
 </body>
